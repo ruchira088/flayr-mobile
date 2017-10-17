@@ -16,12 +16,13 @@ services:
     build: ./airtable-service
     volumes:
       - "./airtable-service:/opt/airtable-service"
+      - "/opt/airtable-service/node_modules"
     ports:
       - 8000:8000
       - 9222:9222
     environment:
-#      - AIRTABLE_API_KEY=
-#      - AIRTABLE_BASE_ID=
+      - AIRTABLE_API_KEY
+      - AIRTABLE_BASE_ID
 
   mobile-app-backend:
     build: ./mobile-app-backend
