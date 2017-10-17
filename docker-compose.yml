@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
+  mongo-database:
+    image: mongo
+    ports:
+      - 27017:27017
+
+  airtable-service:
+    build: ./airtable-service
+    volumes:
+      - "./airtable-service:/opt/airtable-service"
+    ports:
+      - 8000:8000
+      - 9222:9222
+    environment:
+#      - AIRTABLE_API_KEY=
+#      - AIRTABLE_BASE_ID=
+
+  mobile-app-backend:
+    build: ./mobile-app-backend
+    depends_on:
+      - airtable-service
+      - mongo-database
+      - redis
+    ports:
+      - 9000:9000
+      - 5005:5005
+    volumes:
+      - "./mobile-app-backend:/opt/mobile-app-backend"
+      - "~/.sbt:/root/.sbt"
+      - "~/.ivy2:/root/.ivy2"
+      - "~/.aws:/root/.aws"
+    environment:
+      - SCALA_ENV=development
+      - AIRTABLE_SERVICE_URL=http://airtable-service:8000
+      - MONGO_URI=mongodb://mongo-database:27017/mobile-app-backend
+      - REDIS_HOST=redis
