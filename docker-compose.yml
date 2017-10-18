@@ -39,7 +39,7 @@ services:
       - "~/.ivy2:/root/.ivy2"
       - "~/.aws:/root/.aws"
     environment:
-      - SCALA_ENV=development
+      - SCALA_ENV=DEVELOPMENT
       - AIRTABLE_SERVICE_URL=http://airtable-service:8000
       - MONGO_URI=mongodb://mongo-database:27017/mobile-app-backend
       - REDIS_HOST=redis
