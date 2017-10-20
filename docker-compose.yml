@@ -14,6 +14,8 @@ services:
 
   airtable-service:
     build: ./airtable-service
+    depends_on:
+      - mongo-database
     volumes:
       - "./airtable-service:/opt/airtable-service"
       - "/opt/airtable-service/node_modules"
@@ -21,6 +23,7 @@ services:
       - 8000:8000
       - 9222:9222
     environment:
+      - MONGO_URI=mongodb://mongo-database:27017/airtable-service
       - AIRTABLE_API_KEY
       - AIRTABLE_BASE_ID
 
