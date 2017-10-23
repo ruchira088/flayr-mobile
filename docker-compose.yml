@@ -41,8 +41,10 @@ services:
       - "~/.sbt:/root/.sbt"
       - "~/.ivy2:/root/.ivy2"
       - "~/.aws:/root/.aws"
+      - "./certificates:/opt/certificates"
     environment:
       - SCALA_ENV=DEVELOPMENT
       - AIRTABLE_SERVICE_URL=http://airtable-service:8000
       - MONGO_URI=mongodb://mongo-database:27017/mobile-app-backend
       - REDIS_HOST=redis
+      - PASSCODE_LENGTH=2
