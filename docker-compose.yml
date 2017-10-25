@@ -54,6 +54,7 @@ services:
       - POSTGRES_URL=jdbc:postgresql://postgres-database:5432/push-notification-service
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
+      - APNS_CERTIFICATE_PATH=/opt/certificates/flayrStylistAPNS.p12
 
   mobile-app-backend:
     build: ./mobile-app-backend
@@ -74,5 +75,6 @@ services:
       - SCALA_ENV=DEVELOPMENT
       - AIRTABLE_SERVICE_URL=http://airtable-service:8000
       - MONGO_URI=mongodb://mongo-database:27017/mobile-app-backend
+      - PUSH_NOTIFICATION_SERVICE_URL=http://push-notification-service:9000
       - REDIS_HOST=redis
       - PASSCODE_LENGTH=2
