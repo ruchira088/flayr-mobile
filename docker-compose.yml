@@ -12,6 +12,15 @@ services:
     ports:
       - 27017:27017
 
+  postgres-database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=push-notification-service
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+
   airtable-service:
     build: ./airtable-service
     depends_on:
@@ -27,10 +36,30 @@ services:
       - AIRTABLE_API_KEY
       - AIRTABLE_BASE_ID
 
+  push-notification-service:
+    build: ./push-notification-service
+    depends_on:
+      - postgres-database
+    ports:
+      - 9001:9000
+      - 5006:5005
+    volumes:
+      - "./push-notification-service:/opt/push-notification-service"
+      - "~/.sbt:/root/.sbt"
+      - "~/.ivy2:/root/.ivy2"
+      - "./certificates:/opt/certificates"
+    environment:
+      - SCALA_ENV=DEVELOPMENT
+      - AIRTABLE_SERVICE_URL=http://airtable-service:8000
+      - POSTGRES_URL=jdbc:postgresql://postgres-database:5432/push-notification-service
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+
   mobile-app-backend:
     build: ./mobile-app-backend
     depends_on:
       - airtable-service
+      - push-notification-service
       - mongo-database
       - redis
     ports:
@@ -41,7 +70,6 @@ services:
       - "~/.sbt:/root/.sbt"
       - "~/.ivy2:/root/.ivy2"
       - "~/.aws:/root/.aws"
-      - "./certificates:/opt/certificates"
     environment:
       - SCALA_ENV=DEVELOPMENT
       - AIRTABLE_SERVICE_URL=http://airtable-service:8000
