@@ -40,6 +40,7 @@ services:
     build: ./push-notification-service
     depends_on:
       - postgres-database
+      - airtable-service
     ports:
       - 9001:9000
       - 5006:5005
@@ -49,7 +50,7 @@ services:
       - "~/.ivy2:/root/.ivy2"
       - "./certificates:/opt/certificates"
     environment:
-      - SCALA_ENV=DEVELOPMENT
+      - SCALA_ENV=LOCAL_TEST
       - AIRTABLE_SERVICE_URL=http://airtable-service:8000
       - POSTGRES_URL=jdbc:postgresql://postgres-database:5432/push-notification-service
       - POSTGRES_USER=admin
